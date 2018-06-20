@@ -53,18 +53,28 @@ namespace BleSirLo
             // Register event handlers before starting the watcher.
             deviceWatcher.Added += DeviceWatcher_Added;
             deviceWatcher.Updated += DeviceWatcher_Updated;
-            //deviceWatcher.Removed += DeviceWatcher_Removed;
+            deviceWatcher.Removed += DeviceWatcher_Removed;
             deviceWatcher.EnumerationCompleted += DeviceWatcher_EnumerationCompleted;
-            //deviceWatcher.Stopped += DeviceWatcher_Stopped;
+            deviceWatcher.Stopped += DeviceWatcher_Stopped;
 
             // Start over with an empty collection.
             _knownDevices.Clear();
             deviceWatcher.Start();
         }
 
-        private void DeviceWatcher_Updated(DeviceWatcher sender, DeviceInformationUpdate args)
+        private void DeviceWatcher_Stopped(DeviceWatcher sender, object args)
         {
-            return;
+            Respond(args.ToString() + " Stopped");
+        }
+
+        private void DeviceWatcher_Removed(DeviceWatcher sender, DeviceInformationUpdate deviceInfo)
+        {
+            Respond(deviceInfo.Id + " Removed");
+        }
+
+        private void DeviceWatcher_Updated(DeviceWatcher sender, DeviceInformationUpdate deviceInfo)
+        {
+            Respond(deviceInfo.Id + " Updated");
         }
 
         private void DeviceWatcher_EnumerationCompleted(DeviceWatcher sender, object args)
@@ -122,8 +132,13 @@ namespace BleSirLo
         //function that handles printing messages to the textbox
         public void Respond(string message)
         {
-            //append text to current text + new line
-            Response.AppendText(message + Environment.NewLine);
+            //add spacing if there is already data
+            if(Response.Text != "")
+            {
+                Response.AppendText(Environment.NewLine + Environment.NewLine);
+            }
+            //append text to current text
+            Response.AppendText(message);
             //scroll to the bottom most
             Response.ScrollToCaret();
         }
