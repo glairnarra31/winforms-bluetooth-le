@@ -69,11 +69,27 @@ namespace BleSirLo
 
         private void DeviceWatcher_Removed(DeviceWatcher sender, DeviceInformationUpdate deviceInfo)
         {
+            foreach (var device in _knownDevices)
+            {
+                if (device.Id == deviceInfo.Id)
+                {
+                    Respond(device.Name + " Removed");
+                    return;
+                }
+            }
             Respond(deviceInfo.Id + " Removed");
         }
 
         private void DeviceWatcher_Updated(DeviceWatcher sender, DeviceInformationUpdate deviceInfo)
         {
+            foreach(var device in _knownDevices)
+            {
+                if(device.Id == deviceInfo.Id)
+                {
+                    Respond(device.Name + " Updated");
+                    return;
+                }
+            }
             Respond(deviceInfo.Id + " Updated");
         }
 
