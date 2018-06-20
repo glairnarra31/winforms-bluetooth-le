@@ -74,6 +74,8 @@ namespace BleSirLo
                 if (device.Id == deviceInfo.Id)
                 {
                     Respond(device.Name + " Removed");
+                    DevicesComboBox.Items.Remove(device.Name);
+                    _knownDevices.Remove(device);
                     return;
                 }
             }
